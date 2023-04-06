@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Stu-Registration</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='student_registration.css')}}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+</head>
+
+<body>
+    <img class="wave" src="{{url_for('static', filename='wave.png')}}">
+    <div class="container">
+        <div class="img">
+            <!-- <img src="img/bg.svg"> -->
+        </div>
+        <div class="login-content">
+            <form action="{{url_for('student_registration')}}" method="POST">
+                <img src="{{url_for('static', filename='student_avatar.svg')}}">
+                <h3 class="title">Registration</h3>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Moodle ID</h5>
+                        <input type="text" pattern="[0-9]{8}" id="id" class="input" name="id" required>
+                    </div>
+                </div>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Name</h5>
+                        <input type="text" class="input" id="sname" name="sname" required>
+                    </div>
+                </div>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Year</h5>
+                        <input type="dropdown" class="input" name="year" id="year" required>
+                    </div>
+                </div>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Department</h5>
+                        <input type="text" class="input" name="department" id="department" required>
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Password</h5>
+                        <input type="password" class="input" name="pwd" id="pwd" required>
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Confirm Password</h5>
+                        <input type="password" class="input" name="cpwd" id="cpwd" required>
+                    </div>
+                </div>
+                <input type="submit" class="btn" value="Register">
+                {% if error %}
+                <p style="color: red;">{{error}}</p>
+                {% endif %}
+                <a style="text-align: center;" href="{{url_for('student')}}">Go back to Login</a>
+            </form>
+        </div>
+    </div>
+    <script>
+        const inputs = document.querySelectorAll(".input");
+
+
+        function addcl() {
+            let parent = this.parentNode.parentNode;
+            parent.classList.add("focus");
+        }
+
+        function remcl() {
+            let parent = this.parentNode.parentNode;
+            if (this.value == "") {
+                parent.classList.remove("focus");
+            }
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener("focus", addcl);
+            input.addEventListener("blur", remcl);
+        });
+    </script>
+</body>
+
+</html>
+
+<!-- <select name="acyear" id="acyear">
+    <option value="1920">F.E.</option>
+    <option value="2021">S.E.</option>
+    <option value="2122">T.E.</option>
+    <option value="2233">B.E.</option>
+</select> -->

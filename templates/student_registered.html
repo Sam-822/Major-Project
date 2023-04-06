@@ -1,0 +1,44 @@
+{% extends 'student_navbar.html' %}
+
+{% block content %}
+<div>
+    {% if data|length==0 %}
+    <h2>Register yourself in some Event to Give Feedback</h2>
+    {% else %}
+    <table class="table">
+        <thead class="table-dark" style="margin: 10px;">
+            <tr>
+                <th scope="col">Sr No.</th>
+                <th scope="col">Event Name</th>
+                <th scope="col">Course Name</th>
+                <th scope="col">Year</th>
+                <th scope="col">Branch</th>
+                <th scope="col">Give Feedback</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in data %}
+            <tr>
+                <td scope="row">{{loop.index}}</td>
+                <td scope="row">{{i[1]}}</td>
+                <td>{{i[2]}}</td>
+                <td>{{i[3]}}</td>
+                <td>{{i[4]}}</td>
+                <td>
+                    {% if i[5]==0 %}
+                    <form action="{{url_for('deregister_for_event')}}" method="POST">
+                        <button value={{i[0]}} name="register" id="bt">Give Feedback</button>
+                    </form>
+                    {% else %}
+                    <form action="{{url_for('register_for_event')}}" method="POST">
+                        <button value={{i[0]}} name="register" id="bt">View Feedback</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

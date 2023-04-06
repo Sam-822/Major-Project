@@ -1,0 +1,82 @@
+{% extends 'faculty_navbar.html' %}
+
+{% block content %}
+
+<form action="{{url_for('create_event')}}" method="POST">
+
+    <div class="selection">
+        <label for="acyear" name="acyear">Select the Academic Year:</label>
+        {{form.acyear(class="form-control")}}
+    </div>
+
+    <div class="selection">
+        <label for="year" name="year">Select the Year:</label>
+        {{form.yr(class="form-control")}}
+    </div>
+
+    <div class="selection">
+        <label for="dept" name="dept">Select the Department:</label>
+        {{form.dept(class="form-control")}}
+    </div>
+
+    <div class="selection">
+        <label for="course" name="course">Select the Course:</label>
+        {{form.course(class="form-control")}}
+    </div>
+
+    <div class="selection">
+        <label for="event">Enter the Event Name:</label>
+        <input type="text" name="event_name" required>
+    </div>
+    <div clss="selection" style="height: fit-content;">
+        <button type="submit" value="Submit" class="btn" id="create_event_btn">Submit</button>
+    </div>
+</form>
+
+<script>
+    acyear_select = document.getElementById('acyear');
+    year_select = document.getElementById('yr');
+    dept_select = document.getElementById('dept');
+    course_select = document.getElementById('course');
+
+    acyear_select.onchange = function () {
+        acyear = acyear_select.value;
+        fetch('/year').then(function (response) {
+            response.json().then(function (data) {
+                optionHTML = '';
+                for (year of data.year) {
+                    optionHTML += '<option value="' + year.year + '">' + year.year + '</option>'
+                }
+                year_select.innerHTML = optionHTML;
+            });
+        });
+    }
+    year_select.onchange = function () {
+        year = year_select.value;
+        fetch('/dept').then(function (response) {
+            response.json().then(function (data) {
+                optionHTML = '';
+                for (dept of data.dept) {
+                    optionHTML += '<option value="' + dept.dept + '">' + dept.dept + '</option>'
+                }
+                dept_select.innerHTML = optionHTML;
+            });
+        });
+    }
+
+    dept_select.onchange = function () {
+        dept = dept_select.value;
+        year = year_select.value;
+        console.log(dept);
+        fetch('/course/' + dept + '/' + year).then(function (response) {
+            response.json().then(function (data) {
+                optionHTML = '';
+                for (course of data.course) {
+                    optionHTML += '<option value="' + course.course + '">' + course.course + '</option>'
+                }
+                course_select.innerHTML = optionHTML;
+            });
+        });
+    }
+</script>
+{% endblock %}

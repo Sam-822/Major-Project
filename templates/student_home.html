@@ -1,0 +1,51 @@
+{% extends 'student_navbar.html' %}
+
+{% block content %}
+<div>
+    {% if feedback_forms|length==0 %}
+    <h2>No Event to Display Right Now</h2>
+    {% else %}
+    <table class="table">
+        <thead class="table-dark" style="margin: 10px;">
+            <tr>
+                <th scope="col">Sr No.</th>
+                <th scope="col">Event Name</th>
+                <th scope="col">Course Name</th>
+                <th scope="col">Year</th>
+                <th scope="col">Branch</th>
+                <th scope="col">Register/Unregister for Event</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in feedback_forms %}
+            <tr>
+                <td scope="row">{{loop.index}}</td>
+                <td scope="row">{{i[5]}}</td>
+                <td scope="row">{{i[4]}}</td>
+                <td scope="row">{{i[2]}}</td>
+                <td scope="row">{{i[3]}}</td>
+                <td>
+                    <!-- <form action="{{url_for('change_status')}}" method="POST">
+                        {% if i[7]==1 %}
+                        <button value={{i[0]}} name="edit" id="bt">Open Registrations</button>
+                        {% else %}
+                        <button value={{i[0]}} name="edit" id="bt">Close Registrations</button>
+                        {% endif %}
+                    </form> -->
+                    {% if i[0] in registered %}
+                    <form action="{{url_for('deregister_for_event')}}" method="POST">
+                        <button value={{i[0]}} name="register" id="bt">Unregister for Event</button>
+                    </form>
+                    {% else %}
+                    <form action="{{url_for('register_for_event')}}" method="POST">
+                        <button value={{i[0]}} name="register" id="bt">Register for Event</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}
