@@ -73,7 +73,10 @@ def create_event():
             curr.execute("""insert into feedback(academic_year, current_year, department, course_name, event_name, form_time, form_status) value(%s, %s, %s, %s, %s, %s, %s)""",
                          (academic_year, student_year, department, course_name, event_name, create_event_time, 0))
             myconn.commit()
-            return redirect(url_for("create_event"))
+            success = 'Event Created Successfully'
+            form = Form()
+            form.acyear.choices = acyear
+            return render_template('faculty_create_event.html', success=success, form=form)
         else:
             return redirect(url_for('faculty'))
     form = Form()
@@ -162,6 +165,7 @@ def student_home():
     curr.execute('''select * from feedback where current_year=%s and department=%s''',
                  (stu_details[0][0], stu_details[0][1]))
     feedback_forms = curr.fetchall()
+    print(feedback_forms)
     curr.execute('''select form_id from registered where moodle_id=%s''',
                  (session['student_id'],))
     already_registered = curr.fetchall()
@@ -211,6 +215,11 @@ def deregister_for_event():
         return redirect(url_for('student_home'))
 
 
+@app.route("/student/givefeedback/<int:id>", methods=["GET", "POST"])
+def questions(id):
+    return render_template('student_questionnaire.html')
+
+
 @app.route("/change_status", methods=["POST", "GET"])
 def change_status():
     if not session.get('loggedin'):
@@ -237,8 +246,9 @@ def delete():
         id = request.form['delete']
         curr = myconn.cursor()
         curr.execute("""delete from feedback where id=%s""", (id,))
+        curr.execute("""delete from registered where form_id=%s""", (id,))
         myconn.commit()
-        return redirect(url_for('view_event'))
+        return redirect(url_for('event_status'))
 
 
 @app.route("/view/<int:id>", methods=["GET", "POST"])

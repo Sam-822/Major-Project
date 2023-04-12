@@ -5,7 +5,7 @@
     <table class="table">
         <thead class="table-dark" style="margin: 10px;">
             <tr>
-                <th scope="col">Form No.</th>
+                <th scope="col">Sr No.</th>
                 <th scope="col">Event Name</th>
                 <th scope="col">Course Name</th>
                 <th scope="col">Year</th>
@@ -17,7 +17,7 @@
         <tbody>
             {% for i in feedbacks %}
             <tr>
-                <td scope="row">{{i[0]}}</td>
+                <td scope="row">{{loop.index}}</td>
                 <td scope="row">{{i[5]}}</td>
                 <td>{{i[4]}}</td>
                 <td>{{i[2]}}</td>

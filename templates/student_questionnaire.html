@@ -1,0 +1,144 @@
+{% extends 'student_navbar.html' %}
+
+{% block content %}
+<!-- <h1>Event Feedback Form</h1> -->
+<form>
+    <h2>Feedback</h2>
+    <fieldset>
+        <label style="width: 1000px;" for="relatable">1. Was the content relatable?</label>
+        <div id="some-class">
+            <input style="width: 60px;" type="radio" id="relatable-yes" name="relatable" value="yes">
+            <label style="width: 60px;" for="relatable-yes">Yes</label>
+            <input style="width: 60px;" type="radio" id="relatable-no" name="relatable" value="no">
+            <label style="width: 60px;" for="relatable-no">No</label>
+        </div>
+    </fieldset>
+    <fieldset style="width: 1000px;">
+
+        <label for="useful">2. How useful was the event?</label>
+        <div id="some-class">
+            <input style="width: 190px;" type="radio" id="useful-very" name="useful" value="very">
+            <label style="width: 190px;" for="useful-very">Very Useful</label>
+            <input style="width: 190px;" type="radio" id="useful-somewhat" name="useful" value="somewhat">
+            <label style="width: 190px;" for="useful-somewhat">Somewhat Useful</label>
+            <input style="width: 190px;" type="radio" id="useful-not" name="useful" value="not">
+            <label style="width: 190px;" for="useful-not">Not Useful</label>
+        </div>
+    </fieldset>
+
+    <label for="comments" style="width: 1000px">3. Additional comments or suggestions:</label>
+    <textarea id="comments" name="comments" placeholder="Please provide your valuable Feedbacks here"
+        required></textarea>
+    <input type="submit" value="Submit">
+</form>
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        /* border: 1px solid #ccc; */
+        border-radius: 10px;
+        background-color: #fff;
+        transition: transform 0.3s ease-in-out;
+        transform: scale(1);
+    }
+
+    /* form:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    } */
+    fieldset {
+        overflow: hidden
+    }
+
+    .some-class {
+        float: right;
+        clear: none;
+    }
+
+    input[type="radio"],
+    input.radio {
+        margin: 0 10px;
+        width: 50px;
+        float: right;
+        clear: none;
+    }
+
+    input[type="submit"] {
+        padding: 10px 10px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #3e8e41;
+    }
+
+    label {
+        font-weight: bold;
+        margin: 10px 0 10px 0;
+        font-size: 18px;
+        color: #333;
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+        /* align-items: center;
+        justify-content: center; */
+    }
+
+    h1 {
+        margin-top: 0;
+        font-size: 32px;
+        color: #4CAF50;
+        text-align: center;
+    }
+
+    textarea {
+        width: 1000px;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        resize: none;
+        min-height: 150px;
+        max-height: 300px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        form {
+            width: 90%;
+        }
+    }
+
+    /* Changes for horizontal radio buttons */
+    input[type="radio"] {
+        display: none;
+    }
+
+    input[type="radio"]+label {
+        display: inline-block;
+        margin-right: 5px;
+        margin-bottom: 1px;
+        padding: 5px 5px;
+        font-size: 16px;
+        color: #333;
+        background-color: #f2f2f2;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    input[type="radio"]:checked+label {
+        background-color: #4CAF50;
+        color: #fff;
+        border-color: #4CAF50;
+    }
+</style>
+
+{% endblock %}

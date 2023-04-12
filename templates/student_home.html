@@ -32,6 +32,9 @@
                         <button value={{i[0]}} name="edit" id="bt">Close Registrations</button>
                         {% endif %}
                     </form> -->
+                    {% if i[7]==1 %}
+                    <button type="button" disabled>Registration Closed</button>
+                    {% else %}
                     {% if i[0] in registered %}
                     <form action="{{url_for('deregister_for_event')}}" method="POST">
                         <button value={{i[0]}} name="register" id="bt">Unregister for Event</button>
@@ -40,6 +43,7 @@
                     <form action="{{url_for('register_for_event')}}" method="POST">
                         <button value={{i[0]}} name="register" id="bt">Register for Event</button>
                     </form>
+                    {% endif %}
                     {% endif %}
                 </td>
             </tr>

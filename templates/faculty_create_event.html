@@ -3,6 +3,12 @@
 {% block content %}
 
 <form action="{{url_for('create_event')}}" method="POST">
+    {% if success %}
+    <div style="background-color: green; width:400px; margin:0 auto; color:green; padding:10px; text-align:center;"
+        id="hideDiv">
+        {{success}}
+    </div>
+    {% endif %}
 
     <div class="selection">
         <label for="acyear" name="acyear">Select the Academic Year:</label>
@@ -78,5 +84,7 @@
             });
         });
     }
+    const element = document.getElementById("hideDiv");
+    setInterval(function () { element.innerHTML = "", element.style.backgroundColor = 'white' }, 1500);
 </script>
 {% endblock %}

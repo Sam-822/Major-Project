@@ -26,13 +26,11 @@
                 <td>{{i[4]}}</td>
                 <td>
                     {% if i[5]==0 %}
-                    <form action="{{url_for('deregister_for_event')}}" method="POST">
+                    <form action="{{url_for('questions', id=i[0])}}" method="POST">
                         <button value={{i[0]}} name="register" id="bt">Give Feedback</button>
                     </form>
                     {% else %}
-                    <form action="{{url_for('register_for_event')}}" method="POST">
-                        <button value={{i[0]}} name="register" id="bt">View Feedback</button>
-                    </form>
+                    <button value={{i[0]}} name="register" id="bt">View Feedback</button>
                     {% endif %}
                 </td>
             </tr>
