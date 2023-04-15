@@ -1,0 +1,72 @@
+{% extends 'faculty_navbar.html' %}
+{% block content %}
+<div class="container1">
+    <div id="abc"
+        style="background-color: #141414; display: grid; justify-content: center; align-content: center; color: aliceblue;">
+        The Guauge
+    </div>
+    <div
+        style="background-color: #b85042; display: grid; justify-content: center; align-content: center; color: aliceblue;">
+        Pie Chart
+    </div>
+    <div
+        style="background-color: #1fbfb8; display: grid; justify-content: center; align-content: center; color: aliceblue;">
+        Line pointed Graph
+    </div>
+    <div
+        style="background-color: #031163; display: grid; justify-content: center; align-content: center; color: aliceblue;">
+        Over all Review
+    </div>
+</div>
+<div class="container2">
+    <h4 style="margin: 40px 100px 10px 150px;"><b>Feedbacks: </b></h4>
+    {% for i in feedback_data %}
+    <div class="card" style="margin: 10px 350px 10px 150px; border-color: #141414; border-radius: 20px;">
+        <div class=" card-body">
+            <p class="card-text">{{i[4]}}</p>
+            <p>Date ayega</p>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        background-color: white;
+    }
+
+    .faculty-navbar {
+        margin-bottom: 0px;
+    }
+
+    .menu {
+        color: #fff;
+        text-decoration: none;
+        padding: 0 15px;
+        font-size: 18px;
+        line-height: 50px;
+    }
+
+    @media (max-width: 768px) {
+
+        .menu {
+            font-size: 16px;
+            padding: 0 10px;
+            line-height: normal;
+        }
+    }
+
+    .container1 {
+        display: grid;
+        margin: 0px 0px 0px 0px;
+        /* padding: 5px; */
+        height: 100vh;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}

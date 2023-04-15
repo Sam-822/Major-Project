@@ -1,43 +1,44 @@
 {% extends 'faculty_navbar.html' %}
 
 {% block content %}
+<div class="container">
+    <form action="{{url_for('create_event')}}" method="POST">
+        {% if success %}
+        <div style="background-color: green; width:400px; margin:0 auto; color:green; padding:10px; text-align:center;"
+            id="hideDiv">
+            {{success}}
+        </div>
+        {% endif %}
 
-<form action="{{url_for('create_event')}}" method="POST">
-    {% if success %}
-    <div style="background-color: green; width:400px; margin:0 auto; color:green; padding:10px; text-align:center;"
-        id="hideDiv">
-        {{success}}
-    </div>
-    {% endif %}
+        <div class="selection">
+            <label for="acyear" name="acyear">Select the Academic Year:</label>
+            {{form.acyear(class="form-control")}}
+        </div>
 
-    <div class="selection">
-        <label for="acyear" name="acyear">Select the Academic Year:</label>
-        {{form.acyear(class="form-control")}}
-    </div>
+        <div class="selection">
+            <label for="year" name="year">Select the Year:</label>
+            {{form.yr(class="form-control")}}
+        </div>
 
-    <div class="selection">
-        <label for="year" name="year">Select the Year:</label>
-        {{form.yr(class="form-control")}}
-    </div>
+        <div class="selection">
+            <label for="dept" name="dept">Select the Department:</label>
+            {{form.dept(class="form-control")}}
+        </div>
 
-    <div class="selection">
-        <label for="dept" name="dept">Select the Department:</label>
-        {{form.dept(class="form-control")}}
-    </div>
+        <div class="selection">
+            <label for="course" name="course">Select the Course:</label>
+            {{form.course(class="form-control")}}
+        </div>
 
-    <div class="selection">
-        <label for="course" name="course">Select the Course:</label>
-        {{form.course(class="form-control")}}
-    </div>
-
-    <div class="selection">
-        <label for="event">Enter the Event Name:</label>
-        <input type="text" name="event_name" required>
-    </div>
-    <div clss="selection" style="height: fit-content;">
-        <button type="submit" value="Submit" class="btn" id="create_event_btn">Submit</button>
-    </div>
-</form>
+        <div class="selection">
+            <label for="event">Enter the Event Name:</label>
+            <input type="text" name="event_name" required>
+        </div>
+        <div clss="selection" style="height: fit-content;">
+            <button type="submit" value="Submit" class="btn" id="create_event_btn">Submit</button>
+        </div>
+    </form>
+</div>
 
 <script>
     acyear_select = document.getElementById('acyear');

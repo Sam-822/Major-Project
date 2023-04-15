@@ -181,7 +181,7 @@ def student_registered():
         return redirect(url_for('student'))
     curr = myconn.cursor()
     curr.execute(
-        "select feedback.id, feedback.event_name, feedback.course_name, feedback.current_year, feedback.department, registered.feedback_status from feedback left join registered on feedback.id=registered.form_id where registered.moodle_id=%s", (session['student_id'],))
+        "select feedback.id, feedback.event_name, feedback.course_name, feedback.current_year, feedback.department, registered.review_status from feedback left join registered on feedback.id=registered.form_id where registered.moodle_id=%s", (session['student_id'],))
     data = curr.fetchall()
     print(data)
     return render_template('student_registered.html', data=data)
@@ -196,9 +196,9 @@ def register_for_event():
         form_id = request.form['register']
         curr = myconn.cursor()
         curr.execute(
-            '''Insert into registered(form_id, moodle_id, feedback_status) values(%s, %s, %s)''', (form_id, moodle_id, 0))
+            '''Insert into registered(form_id, moodle_id, review_status) values(%s, %s, %s)''', (form_id, moodle_id, 0))
         myconn.commit()
-        return redirect(url_for('student_home'))
+        return redirect(url_for('student_registered'))
 
 
 @app.route("/deregister_for", methods=["GET", "POST"])
@@ -217,6 +217,19 @@ def deregister_for_event():
 
 @app.route("/student/givefeedback/<int:id>", methods=["GET", "POST"])
 def questions(id):
+    if not session.get('student_loggedin'):
+        return redirect(url_for('student'))
+    if request.method == "POST":
+        rank = request.form['rating']
+        rank1 = request.form['rating1']
+        rank2 = request.form['rating2']
+        rank3 = request.form['rating3']
+        review = request.form['feedback-comments']
+        curr = myconn.cursor()
+        curr.execute(
+            '''update registered set relatable=%s, useful=%s, helpful=%s, overall=%s, review=%s, review_status=%s where form_id=%s and moodle_id=%s''', (rank, rank1, rank2, rank3, review, 1, id, session['student_id']))
+        myconn.commit()
+        return render_template('student_questionnaire.html')
     return render_template('student_questionnaire.html')
 
 
@@ -258,9 +271,12 @@ def view(id):
     if request.method == "POST":
         curr = myconn.cursor()
         curr.execute(
-            """select current_year,department,course_name,event_name from feedback where id=%s""", (id,))
+            """select current_year,department,event_name from feedback where id=%s""", (id,))
         data = curr.fetchall()
-        return redirect(url_for('create_event'))
+        curr.execute(
+            '''select relatable, useful, helpful, overall, review from registered where form_id=%s''', (id,))
+        feedback_data = curr.fetchall()
+        return render_template('feedbacks_sentiment.html', feedback_data=feedback_data)
 
 
 @app.route("/logout")
