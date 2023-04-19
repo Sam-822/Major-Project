@@ -1,14 +1,32 @@
+import pickle
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.corpus import stopwords
+from gensim.parsing.preprocessing import STOPWORDS
+from gensim.utils import simple_preprocess
+import gensim
+import matplotlib.pyplot as plt
 from flask import *
+import csv
 import mysql.connector
 import hashlib
 from wtforms import SelectField
 from flask_wtf import FlaskForm
 import time
 from livereload import Server
+import pandas as pd
+import nltk
+from nltk import word_tokenize
+import pandas as pd
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 
 acyear = ["Select to continue", "2019-2020",
           "2020-2021", "2021-2022", "2022-2023"]
 
+
+stop_words = []
 app = Flask(__name__)
 app.secret_key = "dont tell"
 
@@ -45,7 +63,7 @@ def faculty():
         data = curr.fetchall()
         if data:
             session['loggedin'] = True
-            return redirect(url_for("faculty_home"))
+            return redirect(url_for("create_event"))
         else:
             error = 'Incorrect Credentials'
             return render_template("faculty_login.html", error=error)
@@ -98,6 +116,16 @@ def event_status():
 def view_event():
     if not session.get('loggedin'):
         return redirect(url_for('faculty'))
+    if request.method == "POST":
+        yr = request.form['year']
+        dept = request.form['dept']
+        print(yr, dept)
+        curr = myconn.cursor()
+        curr.execute(
+            """select * from feedback where current_year=%s and department=%s""", (yr, dept))
+        feedbacks = curr.fetchall()
+        print(feedbacks)
+        return render_template('faculty_view_feedbacks.html', feedbacks=feedbacks)
     curr = myconn.cursor()
     curr.execute("""select * from feedback""")
     feedbacks = curr.fetchall()
@@ -229,8 +257,8 @@ def questions(id):
         curr.execute(
             '''update registered set relatable=%s, useful=%s, helpful=%s, overall=%s, review=%s, review_status=%s where form_id=%s and moodle_id=%s''', (rank, rank1, rank2, rank3, review, 1, id, session['student_id']))
         myconn.commit()
-        return render_template('student_questionnaire.html')
-    return render_template('student_questionnaire.html')
+        return redirect(url_for('student_registered'))
+    return render_template('student_questionnaire.html', id=id)
 
 
 @app.route("/change_status", methods=["POST", "GET"])
@@ -274,9 +302,71 @@ def view(id):
             """select current_year,department,event_name from feedback where id=%s""", (id,))
         data = curr.fetchall()
         curr.execute(
-            '''select relatable, useful, helpful, overall, review from registered where form_id=%s''', (id,))
+            '''select review from registered where form_id=%s and review_status=%s''', (id, 1))
         feedback_data = curr.fetchall()
-        return render_template('feedbacks_sentiment.html', feedback_data=feedback_data)
+        curr.execute(
+            '''select avg(relatable), avg(useful), avg(helpful), avg(overall) from registered where form_id=%s and review_status=%s''', (id, 1))
+        avgs = curr.fetchall()
+        df = []
+        df_cleaned = []
+        for i in feedback_data:
+            df.append(i[0])
+
+        avg = 0
+        for i in range(len(avgs[0])):
+            avg = avg+int(avgs[0][i])
+        avg /= 5
+
+        stop_words = stopwords.words('english')
+        stop_words.extend(['from', 'subject', 're', 'edu', 'use'])
+
+        def preprocess(text):
+            result = []
+            for token in gensim.utils.simple_preprocess(text):
+                if token not in gensim.parsing.preprocessing.STOPWORDS and len(token) > 3 and token not in stop_words:
+                    result.append(token)
+            return result
+
+        for i in range(len(df)):
+            df_cleaned.append(preprocess(df[i]))
+
+        df_cleaner = []
+        for i in range(len(df_cleaned)):
+            df_cleaner.append(" ".join(df_cleaned[i]))
+
+        with open('tfidf.pickle', 'rb') as f:
+            tfvect = pickle.load(f)
+        df_cleaned = tfvect.transform(df_cleaner)
+
+        print(df_cleaner)
+        with open('RFC.pickle', 'rb') as f:
+            model = pickle.load(f)
+        result = model.predict(df_cleaned)
+
+        result = list(result)
+        one = result.count(1)
+        minus_one = result.count(-1)
+        zero = 2
+        print(one, minus_one, zero)
+
+        content = ["Positive", "Neutral", "Negative"]
+        gms = [one, zero, minus_one]
+        colors = ['green' if x == 'Positive' else 'yellow' if x ==
+                  'Neutral' else 'red' for x in content]
+        plt.pie(gms, labels=content, autopct="%.2f%%", explode=[
+                0, 0, 0.1], shadow=True, colors=colors)
+        plt.title("Feedback Sentiment")
+        plt.savefig('static/pie_plot.png')
+        plt.close()
+
+        plt.bar(content, gms, color=["green", "yellow", "red"], width=0.4)
+        plt.xlabel("content")
+        plt.ylabel("gms")
+        plt.title("FeedbackCount")
+        plt.savefig('static/bar_chart.png')
+        plt.close()
+
+        return render_template('feedbacks_sentiment.html', feedback_data=feedback_data, avg=avg)
 
 
 @app.route("/logout")

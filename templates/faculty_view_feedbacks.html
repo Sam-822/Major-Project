@@ -1,7 +1,36 @@
 {% extends 'faculty_navbar.html' %}
 
 {% block content %}
+<div class="container1" style="margin-bottom: 50px; border-bottom: 10px;">
+    <form method="POST" action="{{url_for('view_event')}}">
+        <div style="width:fit-content; float: left;">
+            <label for="cyear" style="width: fit-content;">Select the Year:</label>
+            <select name="year">
+                <option value="B.E.">B.E.</option>
+                <option value="T.E.">T.E.</option>
+                <option value="S.E.">S.E.</option>
+                <option value="F.E.">F.E.</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="department" style="float: left; margin-left: 100px;">Select the Branch:</label>
+            <br>
+            <select name="dept" style="float: left; width: fit-content; margin-left: 100px;">
+                <option value="Computer Science">Computer Science</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Electronics and Telecommunication">EXTC</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Civil Engineering">Civil</option>
+            </select>
+        </div>
+        <button id="bt" type="submit" style="margin-left: 100px;">Submit</button>
+    </form>
+</div>
 <div class="container">
+    {% if feedbacks|length==0 %}
+    <h2>No Feedbacks Related to this Academic Course</h2>
+    {% else %}
     <table class="table">
         <thead class="table-dark" style="margin: 10px;">
             <tr>
@@ -30,5 +59,18 @@
             {% endfor %}
         </tbody>
     </table>
+    {% endif %}
+    <style>
+        .container1 {
+            max-width: 750px;
+            margin: auto;
+            padding: 20px;
+            height: 120px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
 </div>
 {% endblock %}

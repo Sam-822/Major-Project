@@ -4,7 +4,7 @@
 <h2>Feedback</h2>
 
 <hr>
-<form method="post">
+<form method="post" action="{{url_for('questions', id=id)}}">
     <fieldset>
         <label style="width: 1000px;" for="relatable">1. Was the content relatable?</label>
         <ul class="rate-area">

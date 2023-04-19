@@ -1,34 +1,48 @@
 {% extends 'faculty_navbar.html' %}
 {% block content %}
+{% if feedback_data|length==0 %}
+<div class="container" style="margin-top: 20px;">
+    <h2>No Feedbacks to View</h2>
+</div>
+{% else %}
 <div class="container1">
-    <div id="abc"
-        style="background-color: #141414; display: grid; justify-content: center; align-content: center; color: aliceblue;">
-        The Guauge
+
+    <div id="abc" style="display: grid; justify-content: center; align-content: center; background-color: black;">
+        <img style="margin-top: 20px; margin-left: 20px; border-radius: 2px;"
+            src="{{url_for('static', filename='bar_chart.png')}}">
+
     </div>
-    <div
-        style="background-color: #b85042; display: grid; justify-content: center; align-content: center; color: aliceblue;">
-        Pie Chart
+    <div style=" background-color: #b85042; display: grid; justify-content: center; align-content: center; color:
+            aliceblue; ">
+        <img style="margin-top: 20px; margin-left: 20px; border-radius: 2px;"
+            src="{{url_for('static', filename='pie_plot.png')}}">
     </div>
-    <div
+
+    <!-- <div
         style="background-color: #1fbfb8; display: grid; justify-content: center; align-content: center; color: aliceblue;">
         Line pointed Graph
-    </div>
-    <div
+    </div> -->
+    <!-- <div
         style="background-color: #031163; display: grid; justify-content: center; align-content: center; color: aliceblue;">
         Over all Review
-    </div>
+    </div> -->
 </div>
+<bold>
+    <hr style="height: 7px; background-color: #141414;">
+</bold>
 <div class="container2">
+    <label style="margin: 40px 100px 10px 150px;">Overall Score for the Session - {{avg}}/5</label>
     <h4 style="margin: 40px 100px 10px 150px;"><b>Feedbacks: </b></h4>
     {% for i in feedback_data %}
     <div class="card" style="margin: 10px 350px 10px 150px; border-color: #141414; border-radius: 20px;">
         <div class=" card-body">
-            <p class="card-text">{{i[4]}}</p>
-            <p>Date ayega</p>
+            <p class="card-text">{{i[0]}}</p>
+            <p></p>
         </div>
 
     </div>
     {% endfor %}
+    {% endif %}
 </div>
 <style>
     body {
@@ -63,7 +77,7 @@
         display: grid;
         margin: 0px 0px 0px 0px;
         /* padding: 5px; */
-        height: 100vh;
+        height: 70vh;
         grid-template-columns: auto auto;
         grid-template-rows: auto auto;
         border-radius: 5px;
