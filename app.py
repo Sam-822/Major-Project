@@ -14,7 +14,6 @@ from wtforms import SelectField
 from flask_wtf import FlaskForm
 import time
 from livereload import Server
-import pandas as pd
 import nltk
 from nltk import word_tokenize
 import pandas as pd
@@ -119,12 +118,10 @@ def view_event():
     if request.method == "POST":
         yr = request.form['year']
         dept = request.form['dept']
-        print(yr, dept)
         curr = myconn.cursor()
         curr.execute(
             """select * from feedback where current_year=%s and department=%s""", (yr, dept))
         feedbacks = curr.fetchall()
-        print(feedbacks)
         return render_template('faculty_view_feedbacks.html', feedbacks=feedbacks)
     curr = myconn.cursor()
     curr.execute("""select * from feedback""")
@@ -193,7 +190,6 @@ def student_home():
     curr.execute('''select * from feedback where current_year=%s and department=%s''',
                  (stu_details[0][0], stu_details[0][1]))
     feedback_forms = curr.fetchall()
-    print(feedback_forms)
     curr.execute('''select form_id from registered where moodle_id=%s''',
                  (session['student_id'],))
     already_registered = curr.fetchall()
@@ -211,7 +207,6 @@ def student_registered():
     curr.execute(
         "select feedback.id, feedback.event_name, feedback.course_name, feedback.current_year, feedback.department, registered.review_status from feedback left join registered on feedback.id=registered.form_id where registered.moodle_id=%s", (session['student_id'],))
     data = curr.fetchall()
-    print(data)
     return render_template('student_registered.html', data=data)
 
 
@@ -310,6 +305,7 @@ def view(id):
         df = []
         df_cleaned = []
         for i in feedback_data:
+            print(i)
             df.append(i[0])
 
         avg = 0
@@ -338,7 +334,6 @@ def view(id):
             tfvect = pickle.load(f)
         df_cleaned = tfvect.transform(df_cleaner)
 
-        print(df_cleaner)
         with open('RFC.pickle', 'rb') as f:
             model = pickle.load(f)
         result = model.predict(df_cleaned)
@@ -346,8 +341,8 @@ def view(id):
         result = list(result)
         one = result.count(1)
         minus_one = result.count(-1)
-        zero = 2
-        print(one, minus_one, zero)
+        zero = result.count(0)
+        print(result)
 
         content = ["Positive", "Neutral", "Negative"]
         gms = [one, zero, minus_one]
@@ -365,18 +360,21 @@ def view(id):
         plt.title("FeedbackCount")
         plt.savefig('static/bar_chart.png')
         plt.close()
-
-        return render_template('feedbacks_sentiment.html', feedback_data=feedback_data, avg=avg)
+        return render_template('feedbacks_sentiment.html', feedback_data=feedback_data, avg=avg, result=result)
 
 
 @app.route("/logout")
-def logout():
+def logout_student():
+    if session.get('student_loggedin'):
+        session['student_loggedin'] = False
+        return redirect(url_for('student'))
+
+
+@app.route("/loggout")
+def logout_faculty():
     if session.get('loggedin'):
         session["loggedin"] = False
         return redirect(url_for('faculty'))
-    else:
-        session['student_loggedin'] = False
-        return redirect(url_for('student'))
 
 
 @app.route('/year')

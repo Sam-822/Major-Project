@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Student Feedback</title>
+  <title>Student Feedback Portal</title>
   <style>
     body {
       margin: 0;
@@ -143,6 +143,69 @@
       font-size: 18px;
       cursor: pointer;
     }
+
+    /* Styles for the popup container */
+    .popup-container {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(250, 250, 250, 0.782);
+      z-index: 999;
+    }
+
+    /* Styles for the popup box */
+    .popup-box {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+      padding: 15%;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px #ccc;
+      overflow-y: auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Styles for the popup close button */
+    .popup-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #888;
+      cursor: pointer;
+    }
+
+    /* Styles for the popup content */
+    .popup-content {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+
+    /* Styles for the popup action button */
+    .popup-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+
+    /* Styles for the popup action button hover */
+    .popup-button:hover {
+      background-color: #111519;
+    }
   </style>
 </head>
 
@@ -156,8 +219,6 @@
   </div>
   <div class="split left">
     <div class="centered">
-
-      <!-- <a href="{{url_for('faculty')}}"><h2 style="color: #35d6d1;">Faculty</h2></a> -->
       <a style="text-decoration: none" href="{{url_for('faculty')}}"><img
           src="{{url_for('static', filename='faculty.png')}}" alt="Avatar woman">
         <h2 style="color: #35d6d1;">Faculty</h2>
@@ -173,16 +234,43 @@
       </a>
     </div>
   </div>
-  <div class="container">
-    <div class="left-section">
-      <button>Faculty Login</button>
-    </div>
-
-    <div class="right-section">
-      <button>Student Login</button>
-    </div>
-
   </div>
+
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script>
+    window.onload = function () {
+      var popupContainer = document.createElement("div");
+      popupContainer.classList.add("popup-container");
+
+      var popupBox = document.createElement("div");
+      popupBox.classList.add("popup-box");
+
+      var popupClose = document.createElement("span");
+      popupClose.classList.add("popup-close");
+      // popupClose.innerText = "x";
+      popupClose.onclick = function () {
+        popupContainer.remove();
+      };
+
+      var popupContent = document.createElement("div");
+      popupContent.classList.add("popup-content");
+      popupContent.innerHTML = "<p>Welcome to our website!</p><p>We have provided two sections - one for faculty and one for students. To proceed further, click on the image that corresponds to your designation.</p><p>Please click the button to continue:</p>";
+
+      var popupButton = document.createElement("button");
+      popupButton.classList.add("popup-button");
+      popupButton.innerText = "Continue";
+      popupButton.onclick = function () {
+        popupContainer.remove();
+      };
+
+      popupBox.appendChild(popupClose);
+      popupBox.appendChild(popupContent);
+      popupBox.appendChild(popupButton);
+      popupContainer.appendChild(popupBox);
+      document.body.appendChild(popupContainer);
+    };
+  </script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper-core.min.js"
     integrity="sha384-+JZzv8Qj7yLqK1XVYrWdGxhNlRnUwFgkCtTmOaHbDpJcBvP5sMzIeEo7uZiQ6j/" crossorigin="anonymous"></script>

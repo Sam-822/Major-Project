@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Student Form</title>
+    <title>Student Side</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap');
 
@@ -131,7 +131,7 @@
     <div class="faculty-navbar">
         <a href="{{url_for('student_home')}}" style="background-color: green;">Home</a>
         <a href="{{url_for('student_registered')}}">Registered</a>
-        <a style="margin-left: 1280px;" href="{{url_for('logout')}}">Logout</a>
+        <a style="margin-left: 1280px;" href="{{url_for('logout_student')}}">Logout</a>
     </div>
     <div class="container">
         {% block content %}

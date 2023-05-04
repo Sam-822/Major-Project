@@ -6,26 +6,15 @@
 </div>
 {% else %}
 <div class="container1">
-
     <div id="abc" style="display: grid; justify-content: center; align-content: center; background-color: black;">
         <img style="margin-top: 20px; margin-left: 20px; border-radius: 2px;"
             src="{{url_for('static', filename='bar_chart.png')}}">
-
     </div>
     <div style=" background-color: #b85042; display: grid; justify-content: center; align-content: center; color:
             aliceblue; ">
         <img style="margin-top: 20px; margin-left: 20px; border-radius: 2px;"
             src="{{url_for('static', filename='pie_plot.png')}}">
     </div>
-
-    <!-- <div
-        style="background-color: #1fbfb8; display: grid; justify-content: center; align-content: center; color: aliceblue;">
-        Line pointed Graph
-    </div> -->
-    <!-- <div
-        style="background-color: #031163; display: grid; justify-content: center; align-content: center; color: aliceblue;">
-        Over all Review
-    </div> -->
 </div>
 <bold>
     <hr style="height: 7px; background-color: #141414;">
@@ -34,13 +23,27 @@
     <label style="margin: 40px 100px 10px 150px;">Overall Score for the Session - {{avg}}/5</label>
     <h4 style="margin: 40px 100px 10px 150px;"><b>Feedbacks: </b></h4>
     {% for i in feedback_data %}
-    <div class="card" style="margin: 10px 350px 10px 150px; border-color: #141414; border-radius: 20px;">
+    {% if result[loop.index-1]==0 %}
+    <div class="card"
+        style="margin: 10px 350px 10px 150px; border-color: yellow; border-radius: 50px; border-width: 4px;">
         <div class=" card-body">
             <p class="card-text">{{i[0]}}</p>
-            <p></p>
         </div>
-
     </div>
+    {% elif result[loop.index-1]==1 %}
+    <div class="card"
+        style="margin: 10px 350px 10px 150px; border-color: green; border-radius: 50px; border-width: 4px;">
+        <div class=" card-body">
+            <p class="card-text">{{i[0]}}</p>
+        </div>
+    </div>
+    {% elif result[loop.index-1]==-1 %}
+    <div class="card" style="margin: 10px 350px 10px 150px; border-color: red; border-radius: 50px; border-width: 4px;">
+        <div class=" card-body">
+            <p class="card-text">{{i[0]}}</p>
+        </div>
+    </div>
+    {% endif %}
     {% endfor %}
     {% endif %}
 </div>
