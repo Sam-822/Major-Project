@@ -1,0 +1,11 @@
+Flask
+Flask-WTF
+livereload
+matplotlib
+mysql-connector-python
+nltk
+numpy
+pandas
+scikit-learn
+gensim
+wtforms
